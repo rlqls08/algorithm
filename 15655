@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+int M, N; // 입력
+int arr[8]; // 입력 받을 배열
+
+using namespace std;
+
+// 1. 전달받은 벡터의 복사본을 만든다.
+// 2. 전달받은 벡터의 사이즈가 M과 같으면 값을 출력한다.
+// 3. 전달받은 벡터의 사이즈가 M이 아니고, 전달 받은 다음 번호가 N보다 작을시, 다음 번쨰 값을 원본 vec에 넣어주고 그 다음 번쨰 값을 주고 재귀함수 호출하고, 
+// 그 다음 값을 넣지 않은 복사본과 다음 번쨰 값을 주고 재귀함수 호출
+void NM6(int num, vector <int>& vec)
+{
+    vector <int> vec_copy(vec.size()); // 복사본. deep copy이용
+    copy(vec.begin(), vec.end(), vec_copy.begin());
+    if (vec.size() == M) // 2번
+    {
+        for (int i = 0; i < M; i++)
+            cout << vec[i] << " ";
+        cout << endl;
+    }
+    else if (num < N) /3,4번
+    {
+        vec.push_back(arr[num]);
+        NM6(num + 1, vec); // 3번
+        NM6(num + 1, vec_copy); // 4번
+    }
+}
+
+int main(void)
+{
+    cin >> N >> M;
+
+    for (int i = 0; i < N; i++)
+        cin >> arr[i];
+    sort(arr, arr + N);
+// 입력받아 arr에 저장한 후 sort로 오름차순으로 배열.
+// 그 후 0번~N-1번에 저장된 수를 차례로 벡터 answer에 추가하고 그 다음 번째 번호와 함께 NM6에 전달
+    for (int i = 0; i < N; i++)
+    {
+        vector <int> answer;
+        answer.push_back(arr[i]);
+        NM6(i + 1, answer);
+    }
+}
